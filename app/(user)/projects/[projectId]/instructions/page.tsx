@@ -1,4 +1,5 @@
-import CopyBtn from "@/components/copy-btn";
+import CodeHighlighter from "@/components/code-block";
+
 
 const page = ({
     params,
@@ -10,83 +11,48 @@ const page = ({
     if (!params.projectId) return <div>Invalid Project ID</div>;
     if (!process.env.WIDGET_URL) return <div>Missing WIDGET_URL</div>;
 
+    const code1 =
+        `<my-widget project-id="${params.projectId}"></my-widget>
+<script src="${process.env.WIDGET_URL}/widget.umd.js"></script>
+        `;
+    const code2 =
+        `import "./globals.css";
+import Script from "next/script";
+declare global { 
+    namespace JSX { 
+        interface IntrinsicElements {
+            ['my-widget']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+        }
+    }
+}`;
+    const code3 =
+        `<html lang="en">
+<Script src="${process.env.WIDGET_URL}/widget.umd.js"></Script>
+<body>
+...
+<Script src="${process.env.WIDGET_URL}/widget.umd.js"></Script>
+<my-widget project-id="${params.projectId}"></my-widget>
+</body>`;
+
     return (
         <div>
             <h1 className="text-xl font-bold mb-2">Start Collecting Feedback</h1>
 
-            <p className="text-lg text-secondary-foreground">
+            <p className="text-lg text-secondary-foreground  mb-6">
                 Embeded code in for the widget
             </p>
-            <div className="bg-blue-950 p-6 rounded-md mt-6 relative mb-6">
-                <code className=" text-white">
-                    {`<my-widget project-id="${params.projectId}"></my-widget>`}
-                    <br />
-                    {`<script src="${process.env.WIDGET_URL}/widget.umd.js"></script>`}
-                </code>
-                <CopyBtn
-                    text={`<my-widget project-id="${params.projectId}"></my-widget>\n<script src="${process.env.WIDGET_URL}/widget.umd.js"></script>`}
-                />
-            </div>
+            <CodeHighlighter code={code1} fileName="Widget Code" language="jsx" />
 
-            <p className="text-lg text-secondary-foreground">
-                Step 1: Edit the <code>layout.tsx </code>file by adding this snippet.
+            <p className="text-lg text-secondary-foreground mt-6 mb-6">
+                Step 1: Edit the <code className="px-2 py-1 text-white bg-gray-500 rounded-xl">layout.tsx</code> file by adding this snippet.
             </p>
-            <div className="bg-blue-950 p-6 rounded-md mt-6 relative mb-6">
-                <code className=" text-white">
-                    {`import "./globals.css";`}
-                    <br />
-                    {`declare global { `}
-                    <br />
-                    &ensp;
-                    {`
-                            namespace JSX { `}
-                    <br />
-                    &ensp;&ensp;
-                    {`
-                                interface IntrinsicElements { `}
-                    <br />
-                    &ensp;&ensp;&ensp;
-                    {`
-                                        ['my-widget']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;`}
-                    <br />
-                    &ensp;&ensp;
-                    {`
-                                }`}
-                    <br />
-                    &ensp;
-                    {`
-                            } `}
-                    <br />
-                    {`
-                        }`
-                    }
-                </code>
-                <CopyBtn
-                    text={`<my-widget project-id="${params.projectId}"></my-widget>\n<script src="${process.env.WIDGET_URL}/widget.umd.js"></script>`}
-                />
-            </div>
-            <p className="text-lg text-secondary-foreground">
-                Step 2: Add the snippet in <code>layout.tsx </code>file.
+            <CodeHighlighter code={code2} fileName="layout.tsx" language="jsx" />
+
+            <p className="text-lg text-secondary-foreground mt-6 mb-6">
+                Step 2: Add the snippet in <code className="px-2 py-1 text-white bg-gray-500 rounded-xl">layout.tsx</code> file.
             </p>
-            <div className="bg-blue-950 p-6 rounded-md mt-6 relative mb-6">
-                <code className=" text-white">
-                    {`<html lang="en">`}
-                    <br />
-                    {`<Script src="https://feedback-widget-lyart.vercel.app//widget.umd.js"></Script>`}
-                    <br />
-                    {`<body> `}
-                    <br />
-                    {`...`}
-                    <br />
-                    {`<Script src="https://feedback-widget-lyart.vercel.app//widget.umd.js"></Script>\n`}
-                    <br />
-                    {`<my-widget project-id="${params.projectId}"></my-widget>`}
-                    <br />
-                    {`</body>`}                </code>
-                <CopyBtn
-                    text={`<my-widget project-id="${params.projectId}"></my-widget>\n<script src="${process.env.WIDGET_URL}/widget.umd.js"></script>`}
-                />
-            </div>
+            <CodeHighlighter code={code3} language="jsx" fileName="layout.tsx" />
+
         </div>
     );
 };
